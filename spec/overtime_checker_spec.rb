@@ -5,7 +5,7 @@ require 'timecop'
 
 RSpec.describe OvertimeChecker do
   let(:boss) { Boss.new }
-  let(:worker) { Worker.new(160) }
+  let(:worker) { Worker.new(24000) }
 
   before(:example) do
     boss.assign(worker)
@@ -30,7 +30,7 @@ RSpec.describe OvertimeChecker do
       worker.work_done(overtimechecker)
       
       # Assert
-      expect(boss.pay).to eq(322) # 加班費以 1 小時 30 分鐘計算
+      expect(boss.pay).to eq(201) # 加班費以 1 小時 30 分鐘計算
     end
 
     it '加班第3小時至第4小時，每小時平均工資*時數*1.67' do
@@ -39,7 +39,37 @@ RSpec.describe OvertimeChecker do
       worker.work_done(overtimechecker)
 
       # Assert
-      expect(boss.pay).to eq(830) # 加班費以 3 小時 30 分鐘計算
+      expect(boss.pay).to eq(519) # 加班費以 3 小時 30 分鐘計算
+    end
+  end
+
+  context '休息日的加班	' do
+    let(:overtimechecker) { OvertimeChecker.new('dayoff') }
+
+    it '加班第1小時至第2小時，每小時平均工資*時數*1.34' do
+      # Act
+      Timecop.travel(50 * 60) # 加班 50 分鐘
+      worker.work_done(overtimechecker)
+
+      # Assert
+      expect(boss.pay).to eq(67) # 加班費以 30 分鐘計算
+    end
+
+    it '加班第3小時至第8小時，每小時平均工資*時數*1.67' do
+      # Act
+      Timecop.travel(370 * 60) # 加班 370 分鐘 = 6 小時 10 分鐘
+      worker.work_done(overtimechecker)
+
+      # Assert
+      expect(boss.pay).to eq(936) # 加班費以 6 小時計算
+    end
+
+    it '加班第9小時至第12小時，每小時平均工資*時數*2.67' do
+      Timecop.travel(670 * 60) # 加班 670 分鐘 = 11 小時 10 分鐘
+      worker.work_done(overtimechecker)
+
+      # Assert
+      expect(boss.pay).to eq(2071) # 加班費以 11 小時計算
     end
   end
 end

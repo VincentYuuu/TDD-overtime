@@ -1,8 +1,8 @@
 class Worker
-  attr_reader :wage, :overtimechecker
+  attr_reader :salary, :overtimechecker
 
-  def initialize(wage)
-    @wage = wage
+  def initialize(salary)
+    @salary = salary
   end
 
   def work!
