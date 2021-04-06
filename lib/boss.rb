@@ -22,6 +22,7 @@ class Boss
       when 2..4
         ((salary_per_hour * 2 * 1.34) + (salary_per_hour * (overtime_scale - 2) * 1.67)).ceil
       end
+
     when 'dayoff'
       case overtime_scale
       when 0..2
@@ -30,6 +31,26 @@ class Boss
         ((salary_per_hour * 2 * 1.34) + (salary_per_hour * (overtime_scale - 2) * 1.67)).ceil
       when 8..12
         ((salary_per_hour * 2 * 1.34) + (salary_per_hour * 6 * 1.67) + (salary_per_hour * (overtime_scale - 8) * 2.67)).ceil
+      end
+
+    when 'vacation'
+      case overtime_scale
+      when 0..8
+        salary_per_hour * 8
+      when 8..10
+        (salary_per_hour * 8) + (salary_per_hour * (overtime_scale - 8) * 2.34).ceil
+      when 10..12
+        (salary_per_hour * 8) + (salary_per_hour * 2 * 2.34) + (salary_per_hour * (overtime_scale - 10) * 2.67).ceil
+      end
+
+    when 'vacation_and_special_condition'
+      case overtime_scale
+      when 0..8
+        (salary_per_hour * overtime_scale * 2).ceil
+      when 8..10
+        (salary_per_hour * 8 * 2) + (salary_per_hour * (overtime_scale - 8) * 2.34).ceil
+      when 10..12
+        (salary_per_hour * 8 * 2) + (salary_per_hour * 2 * 2.34) + (salary_per_hour * (overtime_scale - 10) * 2.67).ceil
       end
     end
   end
