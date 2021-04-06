@@ -17,6 +17,8 @@ class Boss
     case overtime_scale
     when 0..2
       (worker.wage * overtime_scale * 1.34).ceil
+    when 2..4
+      ((worker.wage * 2 * 1.34) + (worker.wage * (overtime_scale - 2) * 1.67)).ceil
     end
   end
 end
