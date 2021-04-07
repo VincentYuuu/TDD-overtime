@@ -21,7 +21,7 @@ RSpec.describe OvertimeChecker do
        worker.work_done(overtimechecker)
        
        # Assert
-       expect(boss.pay).to eq(0) # 加班費以 1 小時 30 分鐘計算
+       expect(boss.pay).to eq(0) # 不予計算加班費
     end
 
     it '加班第1小時至第2小時，每小時平均工資*時數*1.34' do
@@ -30,7 +30,7 @@ RSpec.describe OvertimeChecker do
       worker.work_done(overtimechecker)
       
       # Assert
-      expect(boss.pay).to eq(201) # 加班費以 1 小時 30 分鐘計算
+      expect(boss.pay).to eq(201) # 加班費以 1 小時 30 分鐘計算 =  * 
     end
 
     it '加班第3小時至第4小時，每小時平均工資*時數*1.67' do
